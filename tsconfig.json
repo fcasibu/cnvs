@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "useDefineForClassFields": true,
+    "module": "preserve",
+    "noEmit": true,
+    "declaration": true,
+    "lib": ["es2022", "dom", "dom.iterable"],
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowJs": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"],
+  "exclude": ["dist"]
+}

@@ -1,0 +1,46 @@
+{
+  "name": "@fcasibu/cnvs-core",
+  "version": "0.1.9",
+  "type": "module",
+  "description": "A library for working with HTML5 Canvas.",
+  "homepage": "https://github.com/fcaisbu/cnvs",
+  "bugs": {
+    "url": "https://github.com/fcasibu/cnvs/issues"
+  },
+  "author": "fcasibu",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fcasibu/cnvs.git"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --minify --clean",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.1",
+    "@types/howler": "^2.2.12",
+    "eslint": "^9.25.1",
+    "globals": "^16.0.0",
+    "prettier": "^3.5.3",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.31.1"
+  },
+  "dependencies": {
+    "howler": "^2.2.4"
+  }
+}
