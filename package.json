@@ -1,6 +1,6 @@
 {
   "name": "@fcasibu/cnvs-core",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "type": "module",
   "description": "A library for working with HTML5 Canvas.",
   "homepage": "https://github.com/fcaisbu/cnvs",
