@@ -5,7 +5,7 @@ A library for working with HTML5 Canvas.
 ## Installation
 
 ```bash
-npm install @fcasibu/cnvs
+npm install @fcasibu/cnvs-core
 ```
 
 ## Quick Start
@@ -16,7 +16,7 @@ import {
   CanvasCamera,
   Renderer,
   InputManager,
-} from '@fcasibu/cnvs';
+} from '@fcasibu/cnvs-core';
 
 // Set up the canvas
 const canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
@@ -297,7 +297,7 @@ import {
   getDistance,
   getDistanceBetween,
   normalizePoint,
-} from '@fcasibu/cnvs';
+} from '@fcasibu/cnvs-core';
 
 const position = { x: 100, y: 100 };
 const velocity = { x: 5, y: 3 };
