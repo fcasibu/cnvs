@@ -30,24 +30,24 @@ export class CanvasWindow {
     this.setupVisibilityHandling();
   }
 
-  public getContext() {
+  public getContext(): CanvasRenderingContext2D {
     return this.context;
   }
 
-  public getWindowWidth() {
+  public getWindowWidth(): number {
     return this.state.width;
   }
 
-  public getWindowHeight() {
+  public getWindowHeight(): number {
     return this.state.height;
   }
 
-  public setFps(fps: number) {
+  public setFps(fps: number): void {
     fail(fps > 0, 'FPS must be greater than 0');
     this.state.fps = fps;
   }
 
-  public run(callback: (timeStep: number) => void) {
+  public run(callback: (timeStep: number) => void): void {
     this.state.isRunning = true;
     this.state.isPaused = false;
     this.state.lastUpdate = performance.now() / 1000;
@@ -85,24 +85,24 @@ export class CanvasWindow {
     this.animationFrameId = requestAnimationFrame(loop);
   }
 
-  public getFPS() {
+  public getFPS(): number {
     return this.state.fps;
   }
 
-  public pause() {
+  public pause(): void {
     this.state.isPaused = true;
   }
 
-  public resume() {
+  public resume(): void {
     this.state.isPaused = false;
     this.state.lastUpdate = performance.now() / 1000;
   }
 
-  public isPaused() {
+  public isPaused(): boolean {
     return this.state.isPaused;
   }
 
-  public stop() {
+  public stop(): void {
     this.state.isRunning = false;
 
     if (this.animationFrameId) {
@@ -126,7 +126,7 @@ export class CanvasWindow {
     );
   }
 
-  private visibilityChangeListener = () => {
+  private visibilityChangeListener = (): void => {
     this.state.isVisible = document.visibilityState === 'visible';
   };
 }

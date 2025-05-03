@@ -24,30 +24,30 @@ export class SoundManager {
     }
   }
 
-  public play(name: string) {
+  public play(name: string): void {
     fail(name !== undefined, 'Sound name must be provided');
     fail(typeof name === 'string', 'Sound name must be a string');
     this.getAudio(name).play();
   }
 
-  public pause(name: string) {
+  public pause(name: string): void {
     fail(name !== undefined, 'Sound name must be provided');
     fail(typeof name === 'string', 'Sound name must be a string');
     this.getAudio(name).pause();
   }
 
-  public stop(name: string) {
+  public stop(name: string): void {
     fail(name !== undefined, 'Sound name must be provided');
     fail(typeof name === 'string', 'Sound name must be a string');
     this.getAudio(name).stop();
   }
 
-  public setVolume(name: string, volume: number) {
+  public setVolume(name: string, volume: number): void {
     fail(volume >= 0 && volume <= 1, 'Volume must be within the range of 0-1');
     this.getAudio(name).volume(volume);
   }
 
-  public setLoop(name: string, loop: boolean) {
+  public setLoop(name: string, loop: boolean): void {
     fail(name !== undefined, 'Sound name must be provided');
     fail(typeof name === 'string', 'Sound name must be a string');
     fail(loop !== undefined, 'Loop value must be provided');
@@ -56,12 +56,12 @@ export class SoundManager {
     this.getAudio(name).loop(loop);
   }
 
-  public setGlobalVolume(volume: number) {
+  public setGlobalVolume(volume: number): void {
     fail(volume >= 0 && volume <= 1, 'Volume must be within the range of 0-1');
     Howler.volume(volume);
   }
 
-  public unloadAll() {
+  public unloadAll(): void {
     for (const [, value] of this.entries) {
       if (value instanceof Howl) {
         value.unload();

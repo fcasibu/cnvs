@@ -108,7 +108,7 @@ export class TextureManager {
     await Promise.all(promises);
   }
 
-  public unloadAll() {
+  public unloadAll(): void {
     for (const [, value] of this.entries) {
       if (value instanceof ImageBitmap) {
         value.close();

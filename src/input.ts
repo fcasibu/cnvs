@@ -1,3 +1,4 @@
+import type { Point } from './types';
 import { fail } from './utils';
 
 interface MouseState {
@@ -22,7 +23,7 @@ export class InputManager {
   };
   private abortController = new AbortController();
 
-  public getMousePosition() {
+  public getMousePosition(): Point {
     return Object.freeze(this.mouseState.position);
   }
 
@@ -52,11 +53,11 @@ export class InputManager {
     return this.mouseState.pressedButtons.has(button);
   }
 
-  public unregisterListeners() {
+  public unregisterListeners(): void {
     this.abortController.abort();
   }
 
-  public registerListeners(canvas: HTMLCanvasElement) {
+  public registerListeners(canvas: HTMLCanvasElement): void {
     fail(canvas !== undefined, 'Canvas element must be provided');
     fail(
       canvas instanceof HTMLCanvasElement,
@@ -82,17 +83,17 @@ export class InputManager {
     });
   }
 
-  private mouseUp = (event: MouseEvent) => {
+  private mouseUp = (event: MouseEvent): void => {
     this.mouseState.pressedButtons.delete(event.button);
   };
 
-  private mouseDown = (event: MouseEvent) => {
+  private mouseDown = (event: MouseEvent): void => {
     event.preventDefault();
 
     this.mouseState.pressedButtons.add(event.button);
   };
 
-  private mouseMove = (event: MouseEvent) => {
+  private mouseMove = (event: MouseEvent): void => {
     const rect = (event.target as HTMLCanvasElement).getBoundingClientRect();
 
     this.mouseState.position = {
@@ -101,7 +102,7 @@ export class InputManager {
     };
   };
 
-  private keyUp = (event: KeyboardEvent) => {
+  private keyUp = (event: KeyboardEvent): void => {
     this.keyboardState.pressedKeys.delete(event.key);
   };
 

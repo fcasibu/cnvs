@@ -12,7 +12,7 @@ export class CanvasCamera {
     this.zoom = 1.0;
   }
 
-  public configure(camera: Partial<Camera>) {
+  public configure(camera: Partial<Camera>): void {
     for (const [key, value] of Object.entries(camera) as [
       keyof Camera,
       Camera[keyof Camera],
@@ -49,7 +49,7 @@ export class CanvasCamera {
     }
   }
 
-  public apply() {
+  public apply(): void {
     this.ctx.save();
     this.ctx.translate(this.offset.x, this.offset.y);
     this.ctx.scale(this.zoom, this.zoom);
@@ -57,7 +57,7 @@ export class CanvasCamera {
     this.ctx.translate(-this.target.x, -this.target.y);
   }
 
-  public reset() {
+  public reset(): void {
     this.ctx.restore();
   }
 
