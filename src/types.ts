@@ -64,6 +64,7 @@ export interface ImageRegionOptions {
   source: Omit<Rectangle, 'color' | 'type'>;
   position: Point;
   flipDirection?: Point;
+  rotationAngle?: number;
   scale?: number;
   color?: Color;
   blendMode?: GlobalCompositeOperation;

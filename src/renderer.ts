@@ -15,7 +15,7 @@ import { fail } from './utils';
 export class Renderer {
   constructor(private readonly ctx: CanvasRenderingContext2D) {}
 
-  public setGlobalAlpha(globalAlpha: number) {
+  public setGlobalAlpha(globalAlpha: number): void {
     fail(
       globalAlpha >= 0 && globalAlpha <= 1,
       'Global alpha must be between 0 and 1',
@@ -29,7 +29,7 @@ export class Renderer {
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
   }
 
-  public drawShape(shape: Shape) {
+  public drawShape(shape: Shape): void {
     const type = shape.type;
     switch (type) {
       case 'rectangle': {
@@ -97,6 +97,7 @@ export class Renderer {
       position,
       flipDirection,
       scale = 1,
+      rotationAngle = 0,
       color,
       blendMode = 'source-over',
     } = options;
@@ -110,15 +111,20 @@ export class Renderer {
     fail(scale > 0, 'Scale must be greater than 0');
 
     this.ctx.save();
-    this.ctx.translate(position.x, position.y);
+    const drawWidth = source.width * scale;
+    const drawHeight = source.height * scale;
+    const flipX = flipDirection?.x === -1 ? -1 : 1;
+    const flipY = flipDirection?.y === -1 ? -1 : 1;
 
-    if (flipDirection) {
-      const flipX = flipDirection.x === -1;
-      const flipY = flipDirection.y === -1;
+    this.ctx.translate(position.x + drawWidth / 2, position.y + drawHeight / 2);
 
-      this.ctx.scale(flipX ? -1 : 1, flipY ? -1 : 1);
-      this.ctx.translate(flipX ? -source.width : 0, flipY ? -source.height : 0);
+    if (rotationAngle) {
+      this.ctx.rotate(rotationAngle);
     }
+
+    this.ctx.scale(flipX, flipY);
+
+    this.ctx.translate(-drawWidth / 2, -drawHeight / 2);
 
     if (color && blendMode !== 'source-over') {
       const buffer = document.createElement('canvas');
@@ -212,13 +218,13 @@ export class Renderer {
     return metrics;
   }
 
-  private drawRectangle(rect: Rectangle) {
+  private drawRectangle(rect: Rectangle): void {
     const { x, y, width, height, color } = rect;
     this.ctx.fillStyle = color;
     this.ctx.fillRect(x, y, width, height);
   }
 
-  private drawCircle(circle: Circle) {
+  private drawCircle(circle: Circle): void {
     const { x, y, radius, color } = circle;
 
     this.ctx.beginPath();
