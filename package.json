@@ -3,7 +3,7 @@
   "version": "0.1.12",
   "type": "module",
   "description": "A library for working with HTML5 Canvas.",
-  "homepage": "https://github.com/fcaisbu/cnvs",
+  "homepage": "https://github.com/fcasibu/cnvs",
   "bugs": {
     "url": "https://github.com/fcasibu/cnvs/issues"
   },
