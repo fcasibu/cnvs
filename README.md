@@ -22,19 +22,9 @@ import {
 const canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
 
 const CANVAS_WIDTH = 1024;
-const CANVAS_HEIGHT = 1024; 
-// World size
-// Can changed through HTML as well
+const CANVAS_HEIGHT = 1024;
 canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
-
-// If the world boundaries are large, it is best to do the following:
-/**
- * <div style="overrflow: hidden; height: <smaller_size>; width: <smaller_size>;">
- *  <canvas width="5000" height="5000"></canvas>
- * </div>
- */
-// This way we can just control the canvas through the Camera class
 
 // Initialize core components
 const canvasWindow = new CanvasWindow(canvas);
@@ -42,39 +32,48 @@ const renderer = new Renderer(canvasWindow.getContext());
 const camera = new CanvasCamera(canvasWindow.getContext());
 const input = new InputManager();
 
-// Register input listeners
 input.registerListeners(canvas);
 
 // Game state
 const playerPosition = { x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT / 2 };
 const playerSpeed = 200;
+const playerSize = 50;
 
-// Set up camera
 camera.configure({
   target: playerPosition,
   offset: { x: canvas.width / 2, y: canvas.height / 2 },
 });
 
+const TRAIL_LENGTH = 12;
+const trail: { x: number; y: number }[] = [];
+
 // Game loop
 canvasWindow.run((timestep) => {
-  // Handle input
+  let moved = false;
   if (input.isKeyPressed('ArrowRight')) {
     playerPosition.x += playerSpeed * timestep;
+    moved = true;
   }
   if (input.isKeyPressed('ArrowLeft')) {
     playerPosition.x -= playerSpeed * timestep;
+    moved = true;
   }
   if (input.isKeyPressed('ArrowUp')) {
     playerPosition.y -= playerSpeed * timestep;
+    moved = true;
   }
   if (input.isKeyPressed('ArrowDown')) {
     playerPosition.y += playerSpeed * timestep;
+    moved = true;
   }
 
-  // Update camera
-  camera.configure({
-    target: playerPosition,
-  });
+  if (moved) {
+    trail.push({ x: playerPosition.x, y: playerPosition.y });
+    if (trail.length > TRAIL_LENGTH) trail.shift();
+  }
+
+  // Update camera target before drawing
+  camera.configure({ target: playerPosition });
 
   // Clear screen
   renderer.clear('#333333');
@@ -82,20 +81,59 @@ canvasWindow.run((timestep) => {
   // Begin camera transformations
   camera.apply();
 
-  // Draw game objects
+  const GRID_SIZE = 64;
+  const halfW = canvas.width / 2 + GRID_SIZE;
+  const halfH = canvas.height / 2 + GRID_SIZE;
+  const startX = Math.floor((playerPosition.x - halfW) / GRID_SIZE) * GRID_SIZE;
+  const endX = playerPosition.x + halfW;
+  const startY = Math.floor((playerPosition.y - halfH) / GRID_SIZE) * GRID_SIZE;
+  const endY = playerPosition.y + halfH;
+
+  for (let x = startX; x <= endX; x += GRID_SIZE) {
+    renderer.drawLine({
+      start: { x, y: startY },
+      end: { x, y: endY },
+      color: '#ffffff',
+      lineWidth: 1,
+    });
+  }
+  for (let y = startY; y <= endY; y += GRID_SIZE) {
+    renderer.drawLine({
+      start: { x: startX, y },
+      end: { x: endX, y },
+      color: '#ffffff',
+      lineWidth: 1,
+    });
+  }
+
+  trail.forEach((point, i) => {
+    const age = (i + 1) / trail.length;
+    renderer.setGlobalAlpha(age * 0.35);
+    renderer.drawShape({
+      type: 'rectangle',
+      x: point.x - playerSize / 2,
+      y: point.y - playerSize / 2,
+      width: playerSize,
+      height: playerSize,
+      color: '#ff0000',
+    });
+  });
+  renderer.setGlobalAlpha(1); // reset before drawing the solid player
+
+  // Draw game object
   renderer.drawShape({
     type: 'rectangle',
-    x: playerPosition.x - 25,
-    y: playerPosition.y - 25,
-    width: 50,
-    height: 50,
+    x: playerPosition.x - playerSize / 2,
+    y: playerPosition.y - playerSize / 2,
+    width: playerSize,
+    height: playerSize,
     color: '#ff0000',
   });
 
   // End camera transformations
   camera.reset();
 
-  // Draw UI (uses screen coordinates)
+  // Draw UI (screen coordinates)
   renderer.drawText({
     text: 'Use arrow keys to move',
     position: { x: 10, y: 30 },
